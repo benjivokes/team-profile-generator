@@ -4,12 +4,19 @@ const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquire = require("inquirer");
 
+
 var teamList = [];
 const managerQuestions = [
     {
         type: "input",
         name: "name",
-        message: "Enter manager name:"
+        message: "Enter manager name:",
+        validate: async (input) => {
+            if (input == || /\s/.test(input)) {
+                return "Enter first or last name.";
+            }
+            return true;
+        }
     },
     {
         type: "input",
@@ -19,7 +26,13 @@ const managerQuestions = [
     {
         type: "input",
         name: "officeNum",
-        message: "Enter office number:"
+        message: "Enter office number:",
+        validate: async (input) => {
+            if (isNaN(input)) {
+                return "Enter Office Number";
+            }
+            return true;
+        }
     }
 ]
 
