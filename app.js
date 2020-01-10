@@ -89,7 +89,7 @@ const employeeQuestions = [
         },
         type: "input",
         name: "school",
-        message: "Intern, enter your school name:"
+        message: "Intern, enter your school name:",
         validate: async (input) => {
             if (input == "") {
                 return "Enter a Name.";
