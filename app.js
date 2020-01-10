@@ -1,4 +1,3 @@
-const Employee = require("./lib/Employee");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
@@ -13,7 +12,7 @@ const managerQuestions = [
         message: "Enter manager name:",
         validate: async (input) => {
             if (input == || /\s/.test(input)) {
-                return "Enter first or last name.";
+                return "Enter First or Last Name.";
             }
             return true;
         }
@@ -21,7 +20,12 @@ const managerQuestions = [
     {
         type: "input",
         name: "email",
-        message: "Enter manager's email:"
+        message: "Enter manager's email:",
+        validate: async (input) => {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input)) {
+                return true; 
+        }
+        return "Enter Valid Email Address.";
     },
     {
         type: "input",
@@ -40,12 +44,24 @@ const employeeQuestions = [
     {
         type: "input",
         name: "name",
-        message: "Enter employee name:"
+        message: "Enter employee name:",
+        validate: async (input) => {
+            if (input == "") {
+                return "Enter a Name."; 
+            }
+            return true;
+        }
     },
     {
         type: "input",
         name: "email",
-        message: "Enter their email:"
+        message: "Enter their email:",
+        validate: async (input) => {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input)) {
+                return true;
+            }
+            return "Enter Valid Email Address.";
+        }
     },
     {
         type: "list",
@@ -59,7 +75,13 @@ const employeeQuestions = [
         },
         type: "input",
         name: "github",
-        message: "Engineer, enter your github username:"
+        message: "Engineer, enter your github username:",
+        validate: async (input) => {
+            if (input == "" || /\s/.test(input)) {
+                return "Enter Valid GitHub Username";
+            }
+            return true;
+        }
     },
     {
         when: input => {
@@ -68,6 +90,12 @@ const employeeQuestions = [
         type: "input",
         name: "school",
         message: "Intern, enter your school name:"
+        validate: async (input) => {
+            if (input == "") {
+                return "Enter a Name.";
+            }
+            return true;
+        }
     },
     {
         type: "list",
