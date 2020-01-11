@@ -1,9 +1,8 @@
-const Manager = require("./lib/Manager")
+const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquire = require("inquirer");
 const fs = require("fs");
-
 
 var teamList = [];
 const managerQuestions = [
@@ -13,7 +12,7 @@ const managerQuestions = [
         message: "Enter manager name:",
         validate: async (input) => {
             if (input == "" || /\s/.test(input)) {
-                return "Enter First or Last Name.";
+                return "Please enter first or last name.";
             }
             return true;
         }
@@ -24,9 +23,9 @@ const managerQuestions = [
         message: "Enter manager's email:",
         validate: async (input) => {
             if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input)) {
-                return true; 
+                return true;
             }
-        return "Enter Valid Email Address.";
+            return "Please enter a valid email address.";
         }
     },
     {
@@ -35,12 +34,19 @@ const managerQuestions = [
         message: "Enter office number:",
         validate: async (input) => {
             if (isNaN(input)) {
-                return "Enter Office Number";
+                return "Please enter a number";
             }
             return true;
         }
+    },
+    {
+        type: "list",
+        name: "hasTeam",
+        message: "Do you have any team members?",
+        choices: ["Yes", "No"]
     }
 ]
+
 const employeeQuestions = [
     {
         type: "input",
@@ -48,7 +54,7 @@ const employeeQuestions = [
         message: "Enter employee name:",
         validate: async (input) => {
             if (input == "") {
-                return "Enter a Name."; 
+                return "Please enter a name.";
             }
             return true;
         }
@@ -61,7 +67,7 @@ const employeeQuestions = [
             if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input)) {
                 return true;
             }
-            return "Enter Valid Email Address.";
+            return "Please enter a valid email address.";
         }
     },
     {
@@ -79,7 +85,7 @@ const employeeQuestions = [
         message: "Engineer, enter your github username:",
         validate: async (input) => {
             if (input == "" || /\s/.test(input)) {
-                return "Enter Valid GitHub Username";
+                return "Please enter a valid GitHub username";
             }
             return true;
         }
@@ -93,7 +99,7 @@ const employeeQuestions = [
         message: "Intern, enter your school name:",
         validate: async (input) => {
             if (input == "") {
-                return "Enter a Name.";
+                return "Please enter a name.";
             }
             return true;
         }
@@ -133,7 +139,7 @@ function buildHtmlPage() {
 
     for (member of teamList) {
         if (member.getRole() == "Manager") {
-            buildHtmlCard("manager", member.getName(), member.getId(), member.getEmail(), "Office: " + member.getOficeNumber());
+            buildHtmlCard("manager", member.getName(), member.getId(), member.getEmail(), "Office: " + member.getOfficeNumber());
         } else if (member.getRole() == "Engineer") {
             buildHtmlCard("engineer", member.getName(), member.getId(), member.getEmail(), "Github: " + member.getGithub());
         } else if (member.getRole() == "Intern") {
