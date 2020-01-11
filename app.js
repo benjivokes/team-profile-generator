@@ -12,7 +12,7 @@ const managerQuestions = [
         name: "name",
         message: "Enter manager name:",
         validate: async (input) => {
-            if (input == || /\s/.test(input)) {
+            if (input == "" || /\s/.test(input)) {
                 return "Enter First or Last Name.";
             }
             return true;
@@ -124,25 +124,37 @@ function buildTeamList() {
 }
 
 function buildHtmlPage() {
+    let newFile = fs.readFileSync("./templates/main.html")
+    fs.writeFileSync("./output/teamPage.html", newFile, function (err) {
+        if (err) throw err;
+    })
 
-    fs.readFile("./templates/main.html", function (err, data) {
-        fs.writeFileSync("./output/teamePage.html", data, function (err) {
-            if (err) throw err;
-            console.log("Base page generated!");
-        })
-        fs.appendFileSync("./output/teamPage.html", "</div></main></body></html>", function (err) {
-            if (err) throw err;
-            console.log("Page tags closed!");
-        })
-        for (member of teamList) {
-            console.log(member.getRole());
-            // if (member.getRole() == "Manager") {
-            // return;
-            // }
-            }
-            if (err) throw err;
+    console.log("Base page generated!");
+
+    for (member of teamList) {
+        if (member.getRole() == "Manager") {
+            buildHtmlCard("manager", member.getName(), member.getId(), member.getEmail(), "Office: " + member.getOfficeNumber());
+        } else if (member.getRole() == "Engineer") {
+            buildHtmlCard("engineer", member.getName(), member.getId(), member.getEmail(), "Github: " + member.getGithub());
+        } else if (member.getRole() == "Intern") {
+            buildHtmlCard("intern", member.getName(), member.getId(), member.getEmail(), "School: " + member.getSchool());
         }
-        )
+    }
+    fs.appendFileSync("./output/teamPage.html", "</div></main></body></html>", function (err) {
+        if (err) throw err;
+    });
+    console.log("Page tags closed! Operation completed.")
+
+}
+
+function buildHtmlCard(memberType, name, id, email, propertyValue) {
+    let data = fs.readFileSync(`./templates/${memberType}.html`, 'utf8')
+    data = data.replace("nameHere", name);
+    data = data.replace("idHere", `ID: ${id}`);
+    data = data.replace("emailHere", `Email: <a href="mailto:${email}">${email}</a>`);
+    data = data.replace("propertyHere", propertyValue);
+    fs.appendFileSync("./output/teamPage.html", data, err => { if (err) throw err; })
+    console.log("Card appended");
 }
 
 function init() {
@@ -150,8 +162,12 @@ function init() {
         let teamManager = new Manager(managerInfo.name, 1, managerInfo.email, managerInfo.officeNum);
         teamList.push(teamManager);
         console.log(" ");
-        buildTeamList();
+        if (managerInfo.hasTeam === "Yes") {
+            buildTeamList();    
+        } else {
+            buildHtmlPage();
+        }
     })
 }
 
-init(); 
+init();
