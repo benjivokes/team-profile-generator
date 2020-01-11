@@ -25,8 +25,9 @@ const managerQuestions = [
         validate: async (input) => {
             if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input)) {
                 return true; 
-        }
+            }
         return "Enter Valid Email Address.";
+        }
     },
     {
         type: "input",
